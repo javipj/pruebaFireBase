@@ -100,9 +100,14 @@
 		alert("3");
 		batch.start();
 		alert("4");
-		batch.user.getInstallationID(function(installid) {
-		  alert(installid);			
-		});
+		try{
+			batch.user.getInstallationID(function(installid) {
+			  alert(installid);			
+			});
+		}
+		catch(err) {
+		    alert(err.message);
+		}
 		alert("5");
 
 	}
