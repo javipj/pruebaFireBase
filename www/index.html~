@@ -66,7 +66,17 @@
 		batch.push.setGCMSenderID("445987218085").setup();
 		batch.start();
 		batch.push.registerForRemoteNotifications();
-
+try{
+		batch.user.trackEvent("tab_clicked", "registrarpulsado");
+		batch.user.getEditor()
+		    .setIdentifier("john.doe") // Set to `null` if you want to remove the identifier.
+		    .save();
+.catch(function(error) {
+		  // Handle Errors here.
+		  var errorCode = error.code;
+		  var errorMessage = error.message;
+		  alert(errorMessage);
+		});
 
 		var email=document.getElementById("user").value;
 		var password=document.getElementById("pass").value;
