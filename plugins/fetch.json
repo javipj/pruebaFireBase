@@ -1,0 +1,10 @@
+{
+    "com.batch.cordova": {
+        "source": {
+            "type": "local",
+            "path": "../pluginbatch/Batch_Cordova_1.7.4/batch-cordova-plugin"
+        },
+        "is_top_level": true,
+        "variables": {}
+    }
+}
