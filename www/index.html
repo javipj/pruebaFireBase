@@ -99,11 +99,7 @@
 		batch.start();
 		batch.user.getInstallationID(function(installid) {
 		  alert(installid);
-			firebase.database().ref("logins").push({
-						    installid: installid
-						  });
-
-
+			
 		});
 
 	}
