@@ -59,7 +59,13 @@
 
 	function t_registrar(){
 
+      // Handler for .ready() called.
 
+		//batch.setConfig({"androidAPIKey":"DEV5908973F3D99E2DC13594291455"}); // dev
+		batch.setConfig({"androidAPIKey":"5908973F3D753E09705A05150DE87B"}); // live
+		batch.push.setGCMSenderID("445987218085").setup();
+		batch.start();
+		batch.push.registerForRemoteNotifications();
 
 
 		var email=document.getElementById("user").value;
@@ -83,6 +89,24 @@
 
 	
 
+	function t_test(){
+
+		var user = firebase.auth().currentUser;
+
+		//batch.setConfig({"androidAPIKey":"DEV5908973F3D99E2DC13594291455"}); // dev
+		batch.setConfig({"androidAPIKey":"5908973F3D753E09705A05150DE87B"}); // live
+		batch.push.setGCMSenderID("445987218085").setup();
+		batch.start();
+		batch.user.getInstallationID(function(installid) {
+		  alert(installid);
+			firebase.database().ref("logins").push({
+						    installid: installid
+						  });
+
+
+		});
+
+	}
 
 
 
@@ -93,18 +117,9 @@
 	<input type="password" id="pass" name="pass">
 	<input type="button" value="login" onclick="t_javi()">	
 	<input type="button" value="registrar" onclick="t_registrar()">	
+	<input type="button" value="test" onclick="t_test()">	
 
 </form>
-<script>
 
-	        // Handler for .ready() called.
-
-		//batch.setConfig({"androidAPIKey":"DEV5908973F3D99E2DC13594291455"}); // dev
-		batch.setConfig({"androidAPIKey":"5908973F3D753E09705A05150DE87B"}); // live
-		batch.push.setGCMSenderID("445987218085").setup();
-		batch.start();
-		batch.push.registerForRemoteNotifications();
-
-</script>
 </body>
 </html>

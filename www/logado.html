@@ -79,27 +79,6 @@
 				window.location.href = "panel.html";
 	}
 
-	function t_test(){
-
-		var user = firebase.auth().currentUser;
-
-		//batch.setConfig({"androidAPIKey":"DEV5908973F3D99E2DC13594291455"}); // dev
-		batch.setConfig({"androidAPIKey":"5908973F3D753E09705A05150DE87B"}); // live
-		batch.push.setGCMSenderID("445987218085").setup();
-		batch.start();
-		batch.user.getEditor()
-		    .setIdentifier(user.uid) // Set to `null` if you want to remove the identifier.
-		    .save();
-		batch.user.getInstallationID(function(installid) {
-		  alert(installid);
-			firebase.database().ref("logins").push({
-						    installid: installid
-						  });
-
-
-		});
-
-	}
 
 
 
@@ -121,7 +100,7 @@
 
         <input type="file" id="fileButton"/>
 	<input type="button" value="panel" onclick="t_panel()">	
-	<input type="button" value="test" onclick="t_test()">	
+
 
 
 <script>
