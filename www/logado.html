@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   <meta charset="utf-8" />
+   <title>Titulo</title>
+
+	<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+	<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+	
+</head>
+<body>
+ <h1>Hola</h1>
+<script>
+	  // Initialize Firebase
+	  var config = {
+	    apiKey: "AIzaSyDAFw6M2TqHuobL2HYqK7rQof5OoZBBPAI",
+	    authDomain: "test-88454.firebaseapp.com",
+	    databaseURL: "https://test-88454.firebaseio.com",
+	    projectId: "test-88454",
+	    storageBucket: "test-88454.appspot.com",
+	    messagingSenderId: "346580135752"
+	  };
+	  firebase.initializeApp(config);
+
+	  var storage = firebase.storage();
+	  var storageRef = storage.ref();
+     	  var imagesRef = storageRef.child('images');
+
+
+	var metadata;
+
+	firebase.auth().onAuthStateChanged(function(user) {
+	  if (user) {
+	    // User is signed in.
+
+		ficha_usuario();
+	  } else {
+	    // No user is signed in.
+		alert("nologin");
+		window.location.href = "index.html";
+	  }
+	});
+
+
+	function ficha_usuario(){
+
+
+		var user = firebase.auth().currentUser;
+		var name, email, photoUrl, uid;
+
+		if (user != null) {
+		  name = user.displayName;
+		  email = user.email;
+		  photoUrl = user.photoURL;
+		  uid = user.uid;  // The user's ID, unique to the Firebase project. Do NOT use
+				   // this value to authenticate with your backend server, if
+				   // you have one. Use User.getToken() instead.
+
+			  $("#datosUsuario").html("Email:"+email+"<br>Nombre:"+name+"<br>Uid:"+uid);
+			metadata = {
+			  contentType: 'image/jpeg',uid:user.uid,email:user.email
+			};
+			//alert(metadata);
+
+		}
+
+
+	}
+
+
+
+
+
+	</script>
+
+<form>
+
+<p>Bienvenido:</p>
+<div id="datosUsuario">
+
+</div>
+<div id="foto">
+
+</div>
+
+</form>
+
+        <input type="file" id="fileButton"/>
+
+
+<script>
+	// Create the file metadata
+
+	var uploadTask;
+        var file;
+        var storageRef;
+
+	 var fileButton = document.getElementById("fileButton");
+            fileButton.addEventListener('change', function(e){
+                file = e.target.files[0];
+                storageRef = firebase.storage().ref((Math.floor((Math.random() * 9999999) + 1))+file.name);
+                uploadTask = storageRef.put(file,metadata);
+
+
+
+
+
+
+		// Listen for state changes, errors, and completion of the upload.
+		uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+		  function(snapshot) {
+		    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+		    var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+		    console.log('Upload is ' + progress + '% done');
+		    switch (snapshot.state) {
+		      case firebase.storage.TaskState.PAUSED: // or 'paused'
+			console.log('Upload is paused');
+			break;
+		      case firebase.storage.TaskState.RUNNING: // or 'running'
+			console.log('Upload is running');
+			break;
+		    }
+		  }, function(error) {
+		  switch (error.code) {
+		    case 'storage/unauthorized':
+		      // User doesn't have permission to access the object
+		      break;
+
+		    case 'storage/canceled':
+		      // User canceled the upload
+		      break;
+
+
+
+		    case 'storage/unknown':
+		      // Unknown error occurred, inspect error.serverResponse
+		      break;
+		  }
+		}, function() {
+		  // Upload completed successfully, now we can get the download URL
+		  var downloadURL = uploadTask.snapshot.downloadURL;
+			//alert("listo:"+downloadURL);
+			  $("#foto").html("<img src=\""+downloadURL+"\"></img>");
+
+			var user = firebase.auth().currentUser;
+			var name, email, photoUrl, uid;
+
+			name = user.displayName;
+			email = user.email;
+			photoUrl = user.photoURL;
+			uid = user.uid; 
+
+
+			firebase.database().ref("fotos").push({
+			    email: email,
+			    uid : uid,
+			    image: downloadURL	
+			  });
+
+
+		});
+
+
+
+
+
+
+            }); 
+
+
+
+
+</script>
+</body>
+</html>
