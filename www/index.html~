@@ -14,6 +14,15 @@
 <script>
 
 
+	$(function() {
+	        // Handler for .ready() called.
+
+		//batch.setConfig({"androidAPIKey":"DEV5908973F3D99E2DC13594291455"}); // dev
+		batch.setConfig({"androidAPIKey":"5908973F3D753E09705A05150DE87B"}); // live
+		batch.push.setGCMSenderID("445987218085").setup();
+		batch.start();
+		batch.push.registerForRemoteNotifications();
+	});
 
 
 	  // Initialize Firebase
@@ -63,13 +72,6 @@
 
 
 
-// TODO switch to live api key before store release
-			//batch.setConfig({"androidAPIKey":"DEV5908973F3D99E2DC13594291455"}); // dev
-			batch.setConfig({"androidAPIKey":"5908973F3D753E09705A05150DE87B"}); // live
-			batch.push.setGCMSenderID("445987218085").setup();
-			batch.start();
-			batch.push.registerForRemoteNotifications();
-			alert("se ejecuto el start");
 
 		var email=document.getElementById("user").value;
 		var password=document.getElementById("pass").value;
@@ -102,6 +104,7 @@
 	<input type="password" id="pass" name="pass">
 	<input type="button" value="login" onclick="t_javi()">	
 	<input type="button" value="registrar" onclick="t_registrar()">	
+
 </form>
 </body>
 </html>
