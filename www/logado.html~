@@ -90,6 +90,9 @@
 		batch.user.getEditor()
 		    .setIdentifier(user.uid) // Set to `null` if you want to remove the identifier.
 		    .save();
+		batch.user.getInstallationID(function(installid) {
+		  alert(installid);
+		});
 
 	}
 
