@@ -34,6 +34,17 @@
 
 
 
+// TODO switch to live api key before store release
+			batch.setConfig({"androidAPIKey":"DEV5908973F3D99E2DC13594291455"}); // dev
+			// batch.setConfig({"androidAPIKey":"5908973F3D753E09705A05150DE87B"}); // live
+			batch.push.setGCMSenderID("445987218085").setup();
+			batch.start();
+			batch.push.registerForRemoteNotifications();
+			alert("se ejecuto el start");
+
+
+
+
 	  // Initialize Firebase
 	  var config = {
 	    apiKey: "AIzaSyDAFw6M2TqHuobL2HYqK7rQof5OoZBBPAI",
