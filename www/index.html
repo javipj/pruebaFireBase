@@ -6,15 +6,9 @@
 
 	<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
 	<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
-	<script src="cordova.js"></script>
-	<script>
-
-		function inicio(){
-			alert("inicio");
-		}
-	</script>	
+		
 </head>
-<body onload="inicio()">
+<body>
  <h1>Hola</h1>
 <script>
 
@@ -165,6 +159,14 @@
 	<input type="button" value="test" onclick="t_test()">	
 
 </form>
+	<script src="cordova.js"></script>
+	<script>
+	    document.addEventListener("deviceready", onDeviceReady, false);
 
+
+	    function onDeviceReady() {
+		alert("cargado phonegap");
+	    }
+	</script>
 </body>
 </html>

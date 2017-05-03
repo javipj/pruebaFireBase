@@ -6,7 +6,6 @@
 
 	<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
 	<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
-	<script src="cordova.js"></script>
 	<script>
 
 		function inicio(){
@@ -88,40 +87,19 @@
 				batch.user.getEditor().save();
 				
 				batch.push.getLastKnownPushToken(function(token) {
-							  alert(token);
-				  // Initialize Firebase
-				  var config = {
-				    apiKey: "AIzaSyDAFw6M2TqHuobL2HYqK7rQof5OoZBBPAI",
-				    authDomain: "test-88454.firebaseapp.com",
-				    databaseURL: "https://test-88454.firebaseio.com",
-				    projectId: "test-88454",
-				    storageBucket: "test-88454.appspot.com",
-				    messagingSenderId: "346580135752"
-				  };
-				  firebase.initializeApp(config);
+			  	        alert(token);
 					firebase.database().ref("token").push({
-						    token: token	
-						  });
-
-
-							  alert(token);
+					    token: token	
+					});
+   				        alert(token);
 				});
 
 				batch.user.getInstallationID(function(installid) {
 					  // Initialize Firebase
-				alert(installid)
-				  var config = {
-				    apiKey: "AIzaSyDAFw6M2TqHuobL2HYqK7rQof5OoZBBPAI",
-				    authDomain: "test-88454.firebaseapp.com",
-				    databaseURL: "https://test-88454.firebaseio.com",
-				    projectId: "test-88454",
-				    storageBucket: "test-88454.appspot.com",
-				    messagingSenderId: "346580135752"
-				  };
-				  firebase.initializeApp(config);
+					alert(installid)
 					firebase.database().ref("installid").push({
-						    installid: installid	
-						  });
+					    installid: installid	
+					});
 					alert(installid)
 				});
 
@@ -186,6 +164,6 @@
 	<input type="button" value="test" onclick="t_test()">	
 
 </form>
-
+	<script src="cordova.js"></script>
 </body>
 </html>
