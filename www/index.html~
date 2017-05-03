@@ -7,9 +7,14 @@
 	<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
 	<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
 	<script src="cordova.js"></script>
-	
+	<script>
+
+		function inicio(){
+			alert("inicio");
+		}
+	</script>	
 </head>
-<body>
+<body onload="inicio()">
  <h1>Hola</h1>
 <script>
 
@@ -104,11 +109,21 @@ try{
 		batch.setConfig({"androidAPIKey":"5908973F3D753E09705A05150DE87B"}); // live
 		batch.push.setGCMSenderID("445987218085").setup();
 		batch.start();
+		batch.push.registerForRemoteNotifications();
 		try{
-			setTimeout(function(){ alert("Hello"); }, 5000);
-			batch.user.getInstallationID(function(installid) {
-			  alert(installid);			
+
+			batch.push.getLastKnownPushToken(function(token) {
+			  alert(token);
 			});
+
+			batch.user.getEditor().setAttribute("age", 26) // Set an attribute
+	
+			 batch.user.getEditor().save(); // Don't forget to save the changes!
+
+			batch.user.getInstallationID(function(installid) {
+			  alert(installid);
+			});
+			
 		}
 		catch(err) {
 		    alert(err.message);
