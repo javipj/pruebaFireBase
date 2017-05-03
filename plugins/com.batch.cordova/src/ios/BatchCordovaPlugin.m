@@ -2,7 +2,7 @@
 //  BatchCordovaPlugin.m
 //  BatchCordovaPlugin
 //
-//  Copyright (c) 2016 Batch.com. All rights reserved.
+//  Copyright (c) 2015 Batch.com. All rights reserved.
 //
 
 #import "BatchCordovaPlugin.h"
@@ -123,14 +123,7 @@
         return;
     }
 
-    BOOL hasLandingMessage = false;
-    if ([notification.userInfo isKindOfClass:[NSDictionary class]])
-    {
-        BatchPushMessage *parsedMessage = [BatchMessaging messageFromPushPayload:notification.userInfo];
-        hasLandingMessage = parsedMessage != nil;
-    }
-
-    CDVPluginResult *cdvResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"action": @"_dispatchPush", @"payload": notification.userInfo, @"hasLandingMessage": @(hasLandingMessage)}];
+    CDVPluginResult *cdvResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"action": @"_dispatchPush", @"payload": notification.userInfo}];
     [cdvResult setKeepCallbackAsBool:YES];
     if (!self.genericCallbackId)
     {

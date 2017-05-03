@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   <meta charset="utf-8" />
+   <title>Titulo</title>
+
+	<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+	<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+	<script src="cordova.js"></script>
+	
+</head>
+<body>
+ <h1>Hola</h1>
+<script>
+
+
+	  // Initialize Firebase
+	  var config = {
+	    apiKey: "AIzaSyDAFw6M2TqHuobL2HYqK7rQof5OoZBBPAI",
+	    authDomain: "test-88454.firebaseapp.com",
+	    databaseURL: "https://test-88454.firebaseio.com",
+	    projectId: "test-88454",
+	    storageBucket: "test-88454.appspot.com",
+	    messagingSenderId: "346580135752"
+	  };
+	  firebase.initializeApp(config);
+
+
+	function t_javi(){
+
+
+		var user=document.getElementById("user").value;
+		var pass=document.getElementById("pass").value;
+		//alert(user+pass);	
+
+		firebase.auth().signInWithEmailAndPassword(user, pass)
+
+		 .then(function(firebaseUser) {
+			alert("login correcto");
+			window.location.href = "logado.html";
+		
+		   })
+		    .catch(function(error) {
+		  // Handle Errors here.
+		  var errorCode = error.code;
+		  var errorMessage = error.message;
+		  if (errorCode === 'auth/wrong-password') {
+		    alert('Wrong password.');
+		  } else {
+		    alert(errorMessage);
+		  }
+		  console.log(error);
+		});
+
+
+	
+
+	}
+
+	function t_registrar(){
+
+      // Handler for .ready() called.
+
+		//batch.setConfig({"androidAPIKey":"DEV5908973F3D99E2DC13594291455"}); // dev
+		batch.setConfig({"androidAPIKey":"5908973F3D753E09705A05150DE87B"}); // live
+		batch.push.setGCMSenderID("445987218085").setup();
+		batch.start();
+		batch.push.registerForRemoteNotifications();
+try{
+		batch.user.trackEvent("tab_clicked", "registrarpulsado");
+		batch.user.getEditor()
+		    .setIdentifier("john.doe") // Set to `null` if you want to remove the identifier.
+		    .save();
+}
+		catch(err) {
+		    alert(err.message);
+		}
+
+		var email=document.getElementById("user").value;
+		var password=document.getElementById("pass").value;
+
+		firebase.auth().createUserWithEmailAndPassword(email, password)
+
+		 .then(function(firebaseUser) {
+			alert("registrado correctamente");
+			window.location.href = "logado.html";
+		   })
+
+		.catch(function(error) {
+		  // Handle Errors here.
+		  var errorCode = error.code;
+		  var errorMessage = error.message;
+		  alert(errorMessage);
+		});
+
+	}
+
+	
+
+	function t_test(){
+		
+		alert("1");
+		console.log("hola");
+		//batch.setConfig({"androidAPIKey":"DEV5908973F3D99E2DC13594291455"}); // dev
+		batch.setConfig({"androidAPIKey":"5908973F3D753E09705A05150DE87B"}); // live
+		console.log("hola");
+		alert("2");
+		batch.push.setGCMSenderID("445987218085").setup();
+		alert("3");
+		batch.start();
+		alert("4");
+		try{
+			batch.user.getInstallationID(function(installid) {
+			  alert(installid);			
+			});
+		}
+		catch(err) {
+		    alert(err.message);
+		}
+		alert("5");
+
+	}
+
+
+
+	</script>
+
+<form>
+	<input type="text" id="user" name="user">
+	<input type="password" id="pass" name="pass">
+	<input type="button" value="login" onclick="t_javi()">	
+	<input type="button" value="registrar" onclick="t_registrar()">	
+	<input type="button" value="test" onclick="t_test()">	
+
+</form>
+
+</body>
+</html>

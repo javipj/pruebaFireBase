@@ -16,47 +16,47 @@
 enum
 {
     /*!
-     A network problem occurred.
+     @param NSInteger A network problem occurred.
      */
     BatchFailReasonNetworkError             = -10,
     
     /*!
-     Invalid API key.
+     @param NSInteger Invalid API key.
      */
     BatchFailReasonInvalidAPIKey            = -20,
 
     /*!
-     Deactivated API Key.
+     @param NSInteger Deactivated API Key.
      */
     BatchFailReasonDeactivatedAPIKey        = -30,
 
     /*!
-     The given code is invalid.
+     @param NSInteger The given code is invalid.
      */
     BatchFailReasonInvalidCode              = -40,
     
     /*!
-     Another problem occurred. A retry can succeed
+     @param NSInteger Another problem occurred. A retry can succeed
      */
     BatchFailReasonUnexpectedError          = -50,
     
     /*!
-     Input code doesn't match the conditions.
+     @param NSInteger Input code doesn't match the conditions.
      */
     BatchFailReasonMismatchConditions       = -60,
     
     /*!
-     Input placement is unknown.
+     @param NSInteger Input placement is unknown.
      */
     BatchFailReasonUnknownPlacement         = -70,
     
     /*!
-     No Ad found for a placement.
+     @param NSInteger No Ad found for a placement.
      */
     BatchFailReasonNoAdFound                = -80,
     
     /*!
-     Batch Ads module was not configured correctly.
+     @param NSInteger Batch Ads module was not configured correctly.
      */
     BatchFailReasonAdsWrongSetup            = -90
 };
@@ -80,57 +80,57 @@ extern NSString *const BatchFailReasonMissingApplicationsKey;   // On BatchError
 enum
 {
     /*!
-     Value in BatchFailReasonInvalidCodeErrorKey when the offer is paused.
+     @param NSInteger Value in BatchFailReasonInvalidCodeErrorKey when the offer is paused.
      */
     BatchInvalidCodeErrorOfferPaused                = 100,
     
     /*!
-     Value in BatchFailReasonInvalidCodeErrorKey when the offer has already been acquired by the user.
+     @param NSInteger Value in BatchFailReasonInvalidCodeErrorKey when the offer has already been acquired by the user.
      */
     BatchInvalidCodeErrorOfferAlreadyAcquired       = 101,
     
     /*!
-     Value in BatchFailReasonInvalidCodeErrorKey when an offercode has already been consumed.
+     @param NSInteger Value in BatchFailReasonInvalidCodeErrorKey when an offercode has already been consumed.
      */
     BatchInvalidCodeErrorAlreadyConsumed            = 102,
     
     /*!
-     Value in BatchFailReasonInvalidCodeErrorKey when the offer cap has been reached.
+     @param NSInteger Value in BatchFailReasonInvalidCodeErrorKey when the offer cap has been reached.
      */
     BatchInvalidCodeErrorOfferCapped                = 103,
     
     /*!
-     Value in BatchFailReasonInvalidCodeErrorKey when the offer has expired.
+     @param NSInteger Value in BatchFailReasonInvalidCodeErrorKey when the offer has expired.
      */
     BatchInvalidCodeErrorOfferExpired               = 104,
     
     /*!
-     Value in BatchFailReasonInvalidCodeErrorKey when the given code is unknown.
+     @param NSInteger Value in BatchFailReasonInvalidCodeErrorKey when the given code is unknown.
      */
     BatchInvalidCodeErrorUnknownCode                = 105,
     
     /*!
-     Value in BatchFailReasonInvalidCodeErrorKey when some conditions are missing. Call missingApplications: to get the list of missing applications.
+     @param NSinteger Value in BatchFailReasonInvalidCodeErrorKey when some conditions are missing. Call missingApplications: to get the list of missing applications.
      */
     BatchInvalidCodeErrorMissingConditions          = 106,
     
     /*!
-     Value in BatchFailReasonInvalidCodeErrorKey when the offer doesn't match the library version.
+     @param NSinteger Value in BatchFailReasonInvalidCodeErrorKey when the offer doesn't match the library version.
      */
     BatchInvalidCodeErrorOfferUnsupported           = 107,
     
     /*!
-     Value in BatchFailReasonInvalidCodeErrorKey when the offer is not yet started.
+     @param NSinteger Value in BatchFailReasonInvalidCodeErrorKey when the offer is not yet started.
      */
     BatchInvalidCodeErrorOfferNotStarted            = 108,
     
     /*!
-     Value in BatchFailReasonInvalidCodeErrorKey when the user is not targeted by your offer (ex: target only new users, etc...).
+     @param NSinteger Value in BatchFailReasonInvalidCodeErrorKey when the user is not targeted by your offer (ex: target only new users, etc...).
      */
     BatchInvalidCodeErrorUserNotTargeted            = 109,
     
     /*!
-     Value in BatchFailReasonInvalidCodeErrorKey when the server has an error or an invalid state (ex: unable to retrieve an offer which should be retrievable).
+     @param NSinteger Value in BatchFailReasonInvalidCodeErrorKey when the server has an error or an invalid state (ex: unable to retrieve an offer which should be retrievable).
      */
     BatchInvalidCodeErrorServerError                = 110
 };
@@ -159,21 +159,21 @@ typedef NSInteger BatchInvalidCodeError;
  @abstract Helper to find the code that generates a BatchFailReasonInvalidCode error.
  @return The NSString code or nil.
  */
-- (NSString *)invalidCode __attribute__((warn_unused_result)) NS_AVAILABLE_IOS(8_0);
+- (NSString *)invalidCode __attribute__((warn_unused_result)) NS_AVAILABLE_IOS(6_0);
 
 /*!
  @method invalidCodeError
  @abstract Helper to find one of the invalid code error reasons generated by a BatchFailReasonInvalidCode error.
  @return One of the reasons described by BatchInvalidCodeError or 0 if the error was not a BatchFailReasonInvalidCode.
  */
-- (NSUInteger)invalidCodeError __attribute__((warn_unused_result)) NS_AVAILABLE_IOS(8_0);
+- (NSUInteger)invalidCodeError __attribute__((warn_unused_result)) NS_AVAILABLE_IOS(6_0);
 
 /*!
  @method missingApplications
  @abstract Helper to find the applications that generate a BatchInvalidCodeErrorMissingConditions error.
  @return The NSArray of objects implementing BatchApplication protocol. @see BatchApplication
  */
-- (NSArray *)missingApplications __attribute__((warn_unused_result)) NS_AVAILABLE_IOS(8_0);
+- (NSArray *)missingApplications __attribute__((warn_unused_result)) NS_AVAILABLE_IOS(6_0);
 
 @end
 
@@ -192,6 +192,6 @@ typedef NSInteger BatchInvalidCodeError;
  @abstract Application scheme to open.
  @return The NSURL of the application scheme.
  */
-- (NSURL *)scheme __attribute__((warn_unused_result)) NS_AVAILABLE_IOS(8_0);
+- (NSURL *)scheme __attribute__((warn_unused_result)) NS_AVAILABLE_IOS(6_0);
 
 @end

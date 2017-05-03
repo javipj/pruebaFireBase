@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   <meta charset="utf-8" />
+   <title>Titulo</title>
+
+	<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+	<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+	
+</head>
+<body>
+ <h1>Hola</h1>
+<script>
+	  // Initialize Firebase
+	  var config = {
+	    apiKey: "AIzaSyDAFw6M2TqHuobL2HYqK7rQof5OoZBBPAI",
+	    authDomain: "test-88454.firebaseapp.com",
+	    databaseURL: "https://test-88454.firebaseio.com",
+	    projectId: "test-88454",
+	    storageBucket: "test-88454.appspot.com",
+	    messagingSenderId: "346580135752"
+	  };
+	  firebase.initializeApp(config);
+
+	  var database = firebase.database();
+
+	  var str='';
+	  var fotos = firebase.database().ref('fotos');
+		fotos.once("value")
+		  .then(function(snapshot) {
+		    snapshot.forEach(function(childSnapshot) {
+		      // key will be "ada" the first time and "alan" the second time
+		      var key = childSnapshot.key;
+		      // childData will be the actual contents of the child
+		      var childData = childSnapshot.val();
+		      //console.log(key+childData.image);
+			str+='<img onclick="megusta(\''+childSnapshot.key+'\')" src="'+childData.image+'" width="150px" height="150px">';
+			$("#fotos").html(str);
+			
+		  });
+		});
+
+	function megusta(keyFoto){
+		alert(keyFoto);
+	}
+
+	</script>
+
+<div id="fotos"></div>
+
+
+
+</body>
+</html>

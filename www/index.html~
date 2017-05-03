@@ -71,12 +71,10 @@ try{
 		batch.user.getEditor()
 		    .setIdentifier("john.doe") // Set to `null` if you want to remove the identifier.
 		    .save();
-.catch(function(error) {
-		  // Handle Errors here.
-		  var errorCode = error.code;
-		  var errorMessage = error.message;
-		  alert(errorMessage);
-		});
+}
+		catch(err) {
+		    alert(err.message);
+		}
 
 		var email=document.getElementById("user").value;
 		var password=document.getElementById("pass").value;
@@ -101,15 +99,11 @@ try{
 
 	function t_test(){
 		
-		alert("1");
-
+	
 		//batch.setConfig({"androidAPIKey":"DEV5908973F3D99E2DC13594291455"}); // dev
 		batch.setConfig({"androidAPIKey":"5908973F3D753E09705A05150DE87B"}); // live
-		alert("2");
 		batch.push.setGCMSenderID("445987218085").setup();
-		alert("3");
 		batch.start();
-		alert("4");
 		try{
 			batch.user.getInstallationID(function(installid) {
 			  alert(installid);			
@@ -118,8 +112,6 @@ try{
 		catch(err) {
 		    alert(err.message);
 		}
-		alert("5");
-
 	}
 
 

@@ -34,9 +34,4 @@ framework module BatchBridge {
         header "BatchLogger.h"
         export *
     }
-    
-    explicit module JSONHelper {
-        header "BatchJSONHelper.h"
-        export *
-    }
 }

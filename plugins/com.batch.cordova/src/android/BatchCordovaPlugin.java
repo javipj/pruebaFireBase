@@ -1,15 +1,10 @@
 package com.batch.cordova.android;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
-import android.support.v4.content.LocalBroadcastManager;
 
 import com.batch.android.Batch;
-import com.batch.android.BatchPushPayload;
 import com.batch.android.LoggerDelegate;
 import com.batch.android.interop.Action;
 import com.batch.android.interop.Bridge;
@@ -25,17 +20,14 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class BatchCordovaPlugin extends CordovaPlugin implements Callback, LoggerDelegate
 {
-    public static final String ACTION_FOREGROUND_PUSH = "com.batch.android.cordova.foreground_push_received";
-
     private static final String TAG = "BatchCordovaPlugin";
 
     private static final String PLUGIN_VERSION_ENVIRONEMENT_VAR = "batch.plugin.version";
 
-    private static final String PLUGIN_VERSION = "Cordova/1.7.2";
+    private static final String PLUGIN_VERSION = "Cordova/1.4";
 
     /**
      * Key used to add extra to an intent to prevent it to be used more than once to compute opens
@@ -47,8 +39,6 @@ public class BatchCordovaPlugin extends CordovaPlugin implements Callback, Logge
      * Used for automatic restarting of Batch
      */
     private static Boolean BATCH_STARTED = false;
-
-    private static AtomicInteger resumeCount = new AtomicInteger(0);
 
     static
     {
@@ -83,26 +73,20 @@ public class BatchCordovaPlugin extends CordovaPlugin implements Callback, Logge
 
                 if ( rawArgs != null && !rawArgs.isEmpty() )
                 {
-                    try
+                    final List<Object> parametersList = JSONHelper.toList(rawArgs);
+                    if (parametersList != null && parametersList.size() > 0)
                     {
-                        final List<Object> parametersList = JSONHelper.toList(rawArgs);
-                        if (parametersList != null && parametersList.size() > 0)
+                        final Object firstItem = parametersList.get(0);
+
+                        try
                         {
-                            final Object firstItem = parametersList.get(0);
-    
-                            try
-                            {
-                                parametersMap = (Map<String, Object>) firstItem;
-                            }
-                            catch (ClassCastException e)
-                            {
-                                Log.e(TAG, "Error while sending action to Batch: invalid parameters.", e);
-                                // Do nothing here, just ignore
-                            }
+                            parametersMap = (Map<String, Object>) firstItem;
                         }
-                    }
-                    catch (com.batch.android.json.JSONException e) {
-                        throw new JSONException(e.getMessage());
+                        catch (ClassCastException e)
+                        {
+                            Log.e(TAG, "Error while sending action to Batch: invalid parameters.", e);
+                            // Do nothing here, just ignore
+                        }
                     }
                 }
 
@@ -113,9 +97,6 @@ public class BatchCordovaPlugin extends CordovaPlugin implements Callback, Logge
 
                 if( Action.START.getName().equals(action) )
                 {
-                    // Enable manual push to handle foreground notifications
-                    Batch.Push.setManualDisplay(true);
-
                     // Deliver the push that started the activity, if applicable
                     Intent intent = null;
                     try
@@ -148,7 +129,7 @@ public class BatchCordovaPlugin extends CordovaPlugin implements Callback, Logge
 
                 result = Bridge.call(action, parametersMap, this);
             }
-            catch (org.json.JSONException e)
+            catch (JSONException e)
             {
                 Log.e(TAG, "Error while deserializing JSON for Batch Bridge", e);
             }
@@ -195,17 +176,13 @@ public class BatchCordovaPlugin extends CordovaPlugin implements Callback, Logge
             final Map<String, Object> resultArguments = new HashMap<String, Object>();
             resultArguments.put("action", s);
             resultArguments.put("result", map);
-            final PluginResult result = new PluginResult(PluginResult.Status.OK, new org.json.JSONObject(JSONHelper.fromMap(resultArguments).toString()));
+            final PluginResult result = new PluginResult(PluginResult.Status.OK, JSONHelper.fromMap(resultArguments));
             result.setKeepCallback(true);
             webView.sendPluginResult(result, genericCallbackId);
         }
-        catch (com.batch.android.json.JSONException e1)
+        catch (JSONException e)
         {
-            Log.e(TAG, "Error while serializing callback parameters to JSON", e1);
-        }
-        catch (org.json.JSONException e2)
-        {
-            Log.e(TAG, "Error while serializing callback parameters to JSON", e2);
+            Log.e(TAG, "Error while serializing callback parameters to JSON", e);
         }
     }
 
@@ -223,17 +200,13 @@ public class BatchCordovaPlugin extends CordovaPlugin implements Callback, Logge
             final Map<String, Object> resultArguments = new HashMap<String, Object>();
             resultArguments.put("action", "_log");
             resultArguments.put("message", message);
-            final PluginResult result = new PluginResult(PluginResult.Status.OK, new org.json.JSONObject(JSONHelper.fromMap(resultArguments).toString()));
+            final PluginResult result = new PluginResult(PluginResult.Status.OK, JSONHelper.fromMap(resultArguments));
             result.setKeepCallback(true);
             webView.sendPluginResult(result, genericCallbackId);
         }
-        catch (com.batch.android.json.JSONException e1)
+        catch (JSONException e)
         {
-            Log.e(TAG, "Error while serializing callback parameters to JSON", e1);
-        }
-        catch (org.json.JSONException e2)
-        {
-            Log.e(TAG, "Error while serializing callback parameters to JSON", e2);
+            Log.e(TAG, "Error while serializing callback parameters to JSON", e);
         }
     }
 
@@ -290,32 +263,17 @@ public class BatchCordovaPlugin extends CordovaPlugin implements Callback, Logge
 
                 intent.putExtra(INTENT_EXTRA_CONSUMED_PUSH, true);
 
-                boolean hasLandingMessage = false;
-                try
-                {
-                    BatchPushPayload parsedPayload = BatchPushPayload.payloadFromBundle(extras);
-                    if (parsedPayload != null && parsedPayload.hasLandingMessage())
-                    {
-                        hasLandingMessage = true;
-                    }
-                }
-                catch (BatchPushPayload.ParsingException e)
-                {
-                    Log.e(TAG, "Error while checking if the push contains a landing.", e);
-                }
-
                 try
                 {
                     final JSONObject jsonResult = new JSONObject();
                     jsonResult.put("action", "_dispatchPush");
                     jsonResult.put("payload", jsonPayload);
-                    jsonResult.put("hasLandingMessage", hasLandingMessage);
 
                     final PluginResult result = new PluginResult(PluginResult.Status.OK, jsonResult);
                     result.setKeepCallback(true);
                     webView.sendPluginResult(result, genericCallbackId);
                 }
-                catch (org.json.JSONException e)
+                catch (JSONException e)
                 {
                     Log.e(TAG, "Error while sending push payload to cordova.", e);
                 }
@@ -333,29 +291,13 @@ public class BatchCordovaPlugin extends CordovaPlugin implements Callback, Logge
         {
             Batch.onStart(cordova.getActivity());
         }
-        LocalBroadcastManager.getInstance(cordova.getActivity()).registerReceiver(foregroundPushReceiver, new IntentFilter(ACTION_FOREGROUND_PUSH));
     }
 
     @Override
     public void onStop()
     {
-        LocalBroadcastManager.getInstance(cordova.getActivity()).unregisterReceiver(foregroundPushReceiver);
         Batch.onStop(cordova.getActivity());
         super.onStop();
-    }
-
-    @Override
-    public void onPause(boolean multitasking)
-    {
-        super.onPause(multitasking);
-        resumeCount.decrementAndGet();
-    }
-
-    @Override
-    public void onResume(boolean multitasking)
-    {
-        super.onResume(multitasking);
-        resumeCount.incrementAndGet();
     }
 
     @Override
@@ -406,50 +348,4 @@ public class BatchCordovaPlugin extends CordovaPlugin implements Callback, Logge
     {
         log(tag, message, throwable);
     }
-
-    /****
-     * Foreground push
-     */
-    public static boolean isApplicationInForeground()
-    {
-        int count = resumeCount.get();
-
-        // Fix negative resume counts
-        if( count < 0 )
-        {
-            Log.e(TAG, "BatchCordovaPlugin's Activity resume counter is < 0. Something went wrong at some point.");
-
-            // Check that it is still in an invalid state, this may have changed while logging the issue.
-            // Just like AtomicInteger's incrementAndGet() works, try until we are satisfied.
-            for (;;)
-            {
-                int current = resumeCount.get();
-                if( count < 0 )
-                {
-                    if( resumeCount.compareAndSet(count, 0) )
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    // This was fixed by another thread, disregard and wish the developer well
-                    return current != 0;
-                }
-            }
-        }
-
-        return count != 0;
-    }
-
-    private void handleForegroundPush(Intent intent) {
-        sendPushFromIntent(intent, true);
-    }
-
-    private BroadcastReceiver foregroundPushReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            handleForegroundPush(intent);
-        }
-    };
 }
