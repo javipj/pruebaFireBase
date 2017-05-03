@@ -105,6 +105,7 @@ try{
 		batch.push.setGCMSenderID("445987218085").setup();
 		batch.start();
 		try{
+			setTimeout(function(){ alert("Hello"); }, 5000);
 			batch.user.getInstallationID(function(installid) {
 			  alert(installid);			
 			});

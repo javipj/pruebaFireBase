@@ -102,13 +102,17 @@ try{
 	
 		//batch.setConfig({"androidAPIKey":"DEV5908973F3D99E2DC13594291455"}); // dev
 		batch.setConfig({"androidAPIKey":"5908973F3D753E09705A05150DE87B"}); // live
-		batch.push.setGCMSenderID("445987218085").setup();
 		batch.start();
 		try{
-			setTimeout(function(){ alert("Hello"); }, 5000);
+
+			batch.user.getEditor().setAttribute("age", 26) // Set an attribute
+	
+			 batch.user.getEditor().save(); // Don't forget to save the changes!
+
 			batch.user.getInstallationID(function(installid) {
-			  alert(installid);			
+			  alert(installid);
 			});
+			
 		}
 		catch(err) {
 		    alert(err.message);
