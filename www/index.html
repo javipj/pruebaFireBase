@@ -64,30 +64,72 @@
 
 	function t_registrar(){
 
-      // Handler for .ready() called.
-
-		//batch.setConfig({"androidAPIKey":"DEV5908973F3D99E2DC13594291455"}); // dev
-		batch.setConfig({"androidAPIKey":"5908973F3D753E09705A05150DE87B"}); // live
-		batch.push.setGCMSenderID("445987218085").setup();
-		batch.start();
-		batch.push.registerForRemoteNotifications();
-try{
-		batch.user.trackEvent("tab_clicked", "registrarpulsado");
-		batch.user.getEditor()
-		    .setIdentifier("john.doe") // Set to `null` if you want to remove the identifier.
-		    .save();
-}
-		catch(err) {
-		    alert(err.message);
-		}
 
 		var email=document.getElementById("user").value;
 		var password=document.getElementById("pass").value;
 
-		firebase.auth().createUserWithEmailAndPassword(email, password)
+		var usuario=firebase.auth().createUserWithEmailAndPassword(email, password)
 
 		 .then(function(firebaseUser) {
-			alert("registrado correctamente");
+			//usuario registrado correctamente
+			//assignado customid equivalente al de firebase en batch.com para no tener dobles identidades		
+			
+			var uid= firebaseUser.uid;
+			var email= firebaseUser.email;
+
+			
+			batch.setConfig({"androidAPIKey":"5908973F3D753E09705A05150DE87B"}); // live
+			batch.push.setGCMSenderID("445987218085").setup();
+			batch.start();
+			batch.push.registerForRemoteNotifications();
+			try{
+				batch.user.getEditor().setIdentifier(uid);
+				batch.user.getEditor().setAttribute("email", email)
+				batch.user.getEditor().save();
+				
+				batch.push.getLastKnownPushToken(function(token) {
+							  
+				  // Initialize Firebase
+				  var config = {
+				    apiKey: "AIzaSyDAFw6M2TqHuobL2HYqK7rQof5OoZBBPAI",
+				    authDomain: "test-88454.firebaseapp.com",
+				    databaseURL: "https://test-88454.firebaseio.com",
+				    projectId: "test-88454",
+				    storageBucket: "test-88454.appspot.com",
+				    messagingSenderId: "346580135752"
+				  };
+				  firebase.initializeApp(config);
+					firebase.database().ref("token").push({
+						    token: token	
+						  });
+
+
+
+				});
+
+				batch.user.getInstallationID(function(installid) {
+					  // Initialize Firebase
+				  var config = {
+				    apiKey: "AIzaSyDAFw6M2TqHuobL2HYqK7rQof5OoZBBPAI",
+				    authDomain: "test-88454.firebaseapp.com",
+				    databaseURL: "https://test-88454.firebaseio.com",
+				    projectId: "test-88454",
+				    storageBucket: "test-88454.appspot.com",
+				    messagingSenderId: "346580135752"
+				  };
+				  firebase.initializeApp(config);
+					firebase.database().ref("installid").push({
+						    installid: installid	
+						  });
+				});
+
+				
+			}
+			catch(err) {
+			    alert(err.message);
+			}
+			
+
 			window.location.href = "logado.html";
 		   })
 
